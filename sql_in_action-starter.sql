@@ -2,28 +2,32 @@
 -- TODO: Remove the "--" from the below SELECT query and run the query
 --    NOTE: When writing queries, make sure each one ends with a semi-colon
 
--- SELECT * FROM final_airbnb;
+ SELECT * FROM final_airbnb;
 
 
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 1 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find out how many rows are in the table "final_airbnb"
 -- EXPECTED OUTPUT: 146
-
+Select count(*) AS row_count
+from final_airbnb;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 2 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find out the name of the host for "host_id" 63613
 -- HINT: "Where" could it be?
+Select host_name
+from final_airbnb
+where host_id = 63613;
 
 -- EXPECTED OUTPUT: Patricia
-
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 3 >>>>>>>>>>>>>>>>>>>>>>>
 -- Query the data to just show the unique neighbourhoods listed
 -- HINT: This is a "distinct" operation...
 
 -- EXPECTED OUTPUT: 40 neighbourhoods listed
-
+Select distinct neighbourhood
+from final_airbnb;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 4 >>>>>>>>>>>>>>>>>>>>>>>
 
@@ -33,28 +37,39 @@
 -- FOOD FOR THOUGHT: Think about the results. Are the high and low prices outliers in this data set?
 
 -- EXPECTED OUTPUT: Highest = 785, Lowest = 55
+select * from final_airbnb
+order by price desc
+limit 1;
 
+select * from final_airbnb
+order by price
+limit 1;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 5 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find the average availability for all listings in the data set (using the availability_365 column)
 -- HINT: Aggregates are more than just big rocks...
 
 -- EXPECTED OUTPUT: 165.3904
-
+select avg (availability_365) as average_availability
+from final_airbnb;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 6 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find all listings that do NOT have a review
 -- HINT: There are a few ways to go about this. Remember that an empty cell is "no value", but not necessarily NULL
 
 -- EXPECTED OUTPUT: 6 rows
-
+select * from final_airbnb
+where last_review IS null or last_review = '';
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 7 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find the id of the listing with a room_type of "Private room" that has the most reviews 
 -- HINT: Sorting is your friend!
 
 -- EXPECTED OUTPUT: 58059
-
+select ID from final_airbnb
+where room_type = 'Private room'
+order by number_of_reviews desc
+limit 1;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 8 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find the most popular neighbourhood for listings 
@@ -63,13 +78,22 @@
 
 -- EXPECTED OUTPUT: Williamsburg
 -- INVESTIGATE: Should Williamsburg be crowned the most popular neighbourhood?
+select neighbourhood
+from final_airbnb
+group by neighbourhood
+order by count(*) desc
+limit 1;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 9 >>>>>>>>>>>>>>>>>>>>>>>
 -- Query the data to discover which listing is the most popular using the reviews_per_month for all listings with a minimum_nights value of less than 7
 -- HINT: Sorting is still your friend! So are constraints.
 
 -- EXPECTED OUTPUT: 58059
-
+select ID
+from final_airbnb 
+where minimum_nights < 7
+order by reviews_per_month desc
+limit 1;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 10 >>>>>>>>>>>>>>>>>>>>>>>
 -- Find out which host has the most listings. 
@@ -79,13 +103,18 @@
 
 -- EXPECTED OUTPUT: The Box House Hotel with 6 listings
 
+select host_name, count(*) as listing_count
+from final_airbnb
+group by host_name
+order by listing_count desc
+limit 1;
 
 -- <<<<<<<<<<<<<<<<<<<<<< PROBLEM 11 >>>>>>>>>>>>>>>>>>>>>>>
 -- <<<<<<<<<<<<<<<<<<<<<<< WRAP UP >>>>>>>>>>>>>>>>>>>>>>>>>
 -- What do you think makes a successful AirBnB rental in this market? What factors seem to be at play the most?
 -- Write a few sentences and include them with your project submission in the README file 
 
-
+-- What makes a successful AirBnb rental is a variety of things. Everything thing from postivie ratings and reviews to what neigborhod the rental is located. Also how often people decided to rent the location out.
 -- <<<<<<<<<<<<<<<<<<<<< ** BONUS ** >>>>>>>>>>>>>>>>>>>>>>>
 -- Find the the percent above or below each listing is compared to the average price for all listings.
 -- HINT: No hints! It's a bonus for a reason :)
